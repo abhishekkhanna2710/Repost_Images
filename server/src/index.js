@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require("dotenv");
 
 const Connection = require("../mongoDb/Connection.js");
+const ImageRouter = require("../Routes/ImageRoutes.js");
 
 const app = express();
 
@@ -14,6 +15,10 @@ Connection();
 app.use(cors());
 app.use(express.json());
 dotenv.config();
+
+// using routes by middle wares
+
+app.use('/api/vi/images', ImageRouter)
 
 
 app.get('/',(req,res)=>{
