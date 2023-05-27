@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const {getImages}  = require("../Controllers/Images.controllers.js")
+const {getImages,postImages}  = require("../Controllers/Images.controllers.js")
 
 
 
 router.route('/').get(getImages);
+router.route('/').post(postImages);
 
 
 

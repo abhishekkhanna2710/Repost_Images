@@ -18,4 +18,4 @@ const itemsSchema = new mongoose.Schema({
 
 const ItemImage = mongoose.model('imagesList', itemsSchema);
 
-module.expors = ItemImage;
+module.exports = ItemImage;
