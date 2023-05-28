@@ -14,10 +14,11 @@ const getImages = async (req, res) => {
     }
 }
 
+
 const postImages = async (req, res) => {
     try {
 
-        upload.single('imageUrl', 12)(req, res, async (err) => {
+        upload.single('imageUrl', 178)(req, res, async (err) => {
             console.log(req.body)
             console.log(req.file)
 
@@ -29,26 +30,68 @@ const postImages = async (req, res) => {
                 return res.status(500).json({ message: 'Internal Server Error' });
             }
 
-            // Extract the uploaded file details from req.file
             const { serialNumber, title } = req.body;
-            const image_url = req.file;
+            const image_url = req.file.path;
 
-
-            // Handle the uploaded image here
-            // For example, you can save the image URL to the database
+            console.log(image_url, "dsrjfvnrsfgvrfngvkngfvrbndsfnrkbfrkfndsrkbfrsdkdnfkdrsnfkdr");
             const newItem = await ItemImage.create({
                 serialNumber,
                 title,
                 image_url
             });
 
-            // Return the created item as the response
             res.status(201).json(newItem);
-            console.log(image_url);
         });
     } catch (error) {
         console.error('Error in postImages:', error);
         res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
+const updateImage = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { serialNumber, title, image_url } = req.body;
+
+        let image = await ItemImage.findById(id);
+
+        if (!image) {
+            return res.status(404).json({ error: 'Image not found.' });
+        }
+
+        image.serialNumber = serialNumber;
+        image.title = title;
+        image.image_url = image_url;
+
+        image = await image.save();
+
+        console.log(image)
+
+        return res.status(200).json({ message: 'Image updated successfully.', image });
+    } catch (error) {
+        console.error('Error updating image:', error);
+        return res.status(500).json({ error: 'An error occurred while updating the image.' });
+    }
+};
+
+
+
+const deleteImage = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const image = await ItemImage.findById(id);
+
+        if (!image) {
+            return res.status(404).json({ error: 'Image not found.' });
+        }
+
+        await image.deleteOne();
+        return res.status(200).json({ message: 'Image deleted successfully.' });
+
+    } catch (error) {
+        console.error('Error deleting image:', error);
+        return res.status(500).json({ error: 'An error occurred while deleting the image.' });
     }
 };
 
@@ -64,6 +107,7 @@ const postImages = async (req, res) => {
 
 
 
+
 module.exports = {
-    getImages, postImages
+    getImages, postImages, updateImage, deleteImage
 };
