@@ -1,6 +1,7 @@
 const ItemImage = require("../models/imageSchema.js");
 const upload = require("../multer/multerConfig.js");
 const multer = require('multer');
+const path = require('path');
 
 
 const getImages = async (req, res) => {
@@ -15,7 +16,8 @@ const getImages = async (req, res) => {
 
 const postImages = async (req, res) => {
     try {
-        upload.array('imageUrl', 12)(req, res, async (err) => {
+
+        upload.single('imageUrl', 12)(req, res, async (err) => {
             console.log(req.body)
             console.log(req.file)
 
@@ -29,15 +31,18 @@ const postImages = async (req, res) => {
 
             // Extract the uploaded file details from req.file
             const { serialNumber, title } = req.body;
-            const image_url = req.file.path;
+            const image_url = req.file;
 
-            // save the image URL to the database
+
+            // Handle the uploaded image here
+            // For example, you can save the image URL to the database
             const newItem = await ItemImage.create({
                 serialNumber,
                 title,
                 image_url
             });
 
+            // Return the created item as the response
             res.status(201).json(newItem);
             console.log(image_url);
         });
