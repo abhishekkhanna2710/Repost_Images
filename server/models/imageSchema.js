@@ -3,15 +3,15 @@ const mongoose = require('mongoose');
 const itemsSchema = new mongoose.Schema({
     serialNumber:{
         type:String,
-        required :true,
+        // required :true,
     },
     title:{
         type:String,
-        requuired:true,
+        // requuired:true,
     },
     image_url:{
-        type:String,
-        required:true,
+        type:[String],
+        // required:true,
     }
 })
 

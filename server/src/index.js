@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 
 const Connection = require("../mongoDb/Connection.js");
 const ImageRouter = require("../Routes/ImageRoutes.js");
+const path = require('path');
 
 const app = express();
 
@@ -19,6 +20,9 @@ dotenv.config();
 // using routes by middle wares
 
 app.use('/api/vi/images', ImageRouter)
+// app.use('/images', express.static(path.join(__dirname, '../Images')));
+// used for form data
+app.use(express.urlencoded({extended:false}))
 
 
 app.get('/',(req,res)=>{
