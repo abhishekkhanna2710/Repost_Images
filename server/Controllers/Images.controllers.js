@@ -52,7 +52,7 @@ const postImages = async (req, res) => {
 const updateImage = async (req, res) => {
     try {
         const id = req.params.id;
-        const { serialNumber, title, image_url } = req.body;
+        const { serialNumber, title } = req.body;
 
         let image = await ItemImage.findById(id);
 
@@ -60,13 +60,16 @@ const updateImage = async (req, res) => {
             return res.status(404).json({ error: 'Image not found.' });
         }
 
+        // Handle the uploaded file if it exists
+        if (req.file) {
+            image.image_url = req.file.path; // Assuming you are storing the file path in the image_url field
+        }
+
+        // Update the other fields
         image.serialNumber = serialNumber;
         image.title = title;
-        image.image_url = image_url;
 
         image = await image.save();
-
-        console.log(image)
 
         return res.status(200).json({ message: 'Image updated successfully.', image });
     } catch (error) {
@@ -94,17 +97,6 @@ const deleteImage = async (req, res) => {
         return res.status(500).json({ error: 'An error occurred while deleting the image.' });
     }
 };
-
-
-
-
-
-
-
-
-
-
-
 
 
 
