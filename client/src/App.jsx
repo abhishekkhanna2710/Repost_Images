@@ -1,11 +1,13 @@
 import React from "react"
+import Home from "./Components/Home/Home"
 
 function App() {
-  
+
 
   return (
     <>
-      <h1>Hello World</h1>
+      <h1>Table Form</h1>
+      <Home />
     </>
   )
 }
