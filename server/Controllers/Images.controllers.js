@@ -14,13 +14,11 @@ const getImages = async (req, res) => {
     }
 }
 
-
 const postImages = async (req, res) => {
     try {
-
-        upload.single('imageUrl', 178)(req, res, async (err) => {
-            console.log(req.body)
-            console.log(req.file)
+        upload.single('imageUrl')(req, res, async (err) => {
+            console.log(req.body);
+            console.log(req.file);
 
             if (err instanceof multer.MulterError) {
                 console.error('Multer Error:', err);
@@ -31,13 +29,16 @@ const postImages = async (req, res) => {
             }
 
             const { serialNumber, title } = req.body;
-            const image_url = req.file.path;
+            const image_url = `${req.protocol}://${req.get('host')}/${req.file.filename}`;
 
-            console.log(image_url, "dsrjfvnrsfgvrfngvkngfvrbndsfnrkbfrkfndsrkbfrsdkdnfkdrsnfkdr");
+            console.log(
+                image_url,
+                'dsrjfvnrsfgvrfngvkngfvrbndsfnrkbfrkfndsrkbfrsdkdnfkdrsnfkdr'
+            );
             const newItem = await ItemImage.create({
                 serialNumber,
                 title,
-                image_url
+                image_url: image_url
             });
 
             res.status(201).json(newItem);
